@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="fa" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BazarMall — Handmade & Local Marketplace</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/style/style.css" />
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <div class="nav-logo" onclick="showPage('home')">
+        <div class="nav-logo-icon">B</div>
+        <span>BazarMall</span>
+      </div>
+      <div class="nav-links">
+        <span class="nav-link active" id="nav-home" onclick="showPage('home')"
+          >Home</span
+        >
+        <span class="nav-link" id="nav-shop" onclick="showPage('shop')"
+          >Shop</span
+        >
+        <span class="nav-link" id="nav-about" onclick="showPage('about')"
+          >About</span
+        >
+      </div>
+      <div class="nav-right">
+        <div class="search-wrap">
+          <span class="si">🔍</span>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search handmade goods…"
+            oninput="handleSearch(this.value)"
+          />
+        </div>
+        <button class="cart-btn" onclick="showPage('cart')">
+          🛒 Cart
+          <span class="cart-badge" id="cart-badge" style="display: none"
+            >0</span
+          >
+        </button>
+      </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page active">
+      <div class="hero">
+        <div class="hero-circle1"></div>
+        <div class="hero-circle2"></div>
+        <div class="hero-inner">
+          <div class="hero-badge">🌿 HANDMADE & LOCAL GOODS</div>
+          <h1>Discover things made<br /><em>with care</em></h1>
+          <p>
+            A curated marketplace of handmade, artisan, and locally-sourced
+            products.<br />Every purchase supports an independent maker.
+          </p>
+          <div class="hero-btns">
+            <button class="btn-primary" onclick="showPage('shop')">
+              Browse All Products
+            </button>
+            <button class="btn-secondary" onclick="showPage('about')">
+              Our Story
+            </button>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-num">500+</div>
+              <div class="stat-label">Products</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">120+</div>
+              <div class="stat-label">Sellers</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">4.8★</div>
+              <div class="stat-label">Avg Rating</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="categories-section">
+        <div class="section-header">
+          <div>
+            <div class="section-eyebrow">Browse By</div>
+            <div class="section-title">Categories</div>
+          </div>
+        </div>
+        <div class="cat-grid">
+          <div class="cat-card" onclick="filterByCategory('Textiles')">
+            <div class="cat-icon">🧵</div>
+            <div class="cat-name">Textiles</div>
+            <div class="cat-count">3 items</div>
+          </div>
+          <div class="cat-card" onclick="filterByCategory('Ceramics')">
+            <div class="cat-icon">🏺</div>
+            <div class="cat-name">Ceramics</div>
+            <div class="cat-count">2 items</div>
+          </div>
+          <div class="cat-card" onclick="filterByCategory('Food & Drink')">
+            <div class="cat-icon">🫙</div>
+            <div class="cat-name">Food & Drink</div>
+            <div class="cat-count">3 items</div>
+          </div>
+          <div class="cat-card" onclick="filterByCategory('Home Decor')">
+            <div class="cat-icon">🕯️</div>
+            <div class="cat-name">Home Decor</div>
+            <div class="cat-count">1 item</div>
+          </div>
+          <div class="cat-card" onclick="filterByCategory('Stationery')">
+            <div class="cat-icon">✒️</div>
+            <div class="cat-name">Stationery</div>
+            <div class="cat-count">2 items</div>
+          </div>
+          <div class="cat-card" onclick="filterByCategory('Accessories')">
+            <div class="cat-icon">👜</div>
+            <div class="cat-name">Accessories</div>
+            <div class="cat-count">1 item</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="products-section">
+        <div class="section-header">
+          <div>
+            <div class="section-eyebrow">Handpicked</div>
+            <div class="section-title">Featured Products</div>
+          </div>
+          <span class="view-all" onclick="showPage('shop')">View all →</span>
+        </div>
+        <div class="product-grid" id="featured-grid"></div>
+      </div>
+
+      <div class="seller-banner">
+        <h2>Are you a maker?</h2>
+        <p>
+          Join hundreds of artisans already selling on BazarMall. No listing
+          fees, fair commissions, and real support.
+        </p>
+        <button class="btn-primary">Start Selling Today</button>
+      </div>
+    </div>
+
+    <!-- SHOP PAGE -->
+    <div id="page-shop" class="page">
+      <div class="shop-page">
+        <div class="shop-header">
+          <h1 id="shop-title">All Products</h1>
+          <p id="shop-count">12 products found</p>
+        </div>
+        <div class="shop-layout">
+          <div class="filter-panel">
+            <div class="filter-title">Filters</div>
+            <div class="filter-section">
+              <div class="filter-label">Category</div>
+              <div id="cat-filters"></div>
+            </div>
+            <div class="filter-section">
+              <div class="filter-label">Max Price</div>
+              <input
+                type="range"
+                min="10"
+                max="200"
+                value="200"
+                class="price-range"
+                id="price-filter"
+                oninput="applyFilters()"
+              />
+              <div class="price-display">
+                <span>€0</span
+                ><span id="price-val" style="font-weight: 600; color: #1c1a17"
+                  >up to €200</span
+                >
+              </div>
+            </div>
+            <div class="filter-section">
+              <div class="filter-label">Min Rating</div>
+              <div class="filter-option active" onclick="setRating(0, this)">
+                All ratings
+              </div>
+              <div class="filter-option" onclick="setRating(4, this)">
+                4★ and above
+              </div>
+              <div class="filter-option" onclick="setRating(4.5, this)">
+                4.5★ and above
+              </div>
+              <div class="filter-option" onclick="setRating(4.8, this)">
+                4.8★ and above
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="sort-bar">
+              <select
+                class="sort-select"
+                id="sort-select"
+                onchange="applyFilters()"
+              >
+                <option value="popular">Most Popular</option>
+                <option value="rating">Highest Rated</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+              </select>
+            </div>
+            <div class="product-grid" id="shop-grid"></div>
+            <div id="shop-empty" class="empty-state" style="display: none">
+              <div class="empty-icon">🔍</div>
+              <div style="font-size: 16px; font-weight: 500">
+                No products match your filters
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT DETAIL PAGE -->
+    <div id="page-product" class="page">
+      <div class="product-detail">
+        <span
+          class="back-link"
+          onclick="
+            history.back();
+            goBack();
+          "
+          >← Back to Shop</span
+        >
+        <div class="detail-grid">
+          <div>
+            <div class="main-img" id="detail-img-main"></div>
+            <div class="thumb-grid" id="detail-thumbs"></div>
+          </div>
+          <div>
+            <div class="detail-eyebrow" id="detail-cat"></div>
+            <h1 class="detail-title" id="detail-name"></h1>
+            <div class="detail-rating">
+              <span class="stars" id="detail-stars"></span>
+              <span
+                style="font-size: 14px; font-weight: 600"
+                id="detail-rating-num"
+              ></span>
+              <span
+                style="font-size: 13px; color: #a89880"
+                id="detail-reviews"
+              ></span>
+            </div>
+            <div class="detail-price" id="detail-price"></div>
+            <p class="detail-desc" id="detail-desc"></p>
+            <div class="tags-row" id="detail-tags"></div>
+            <div class="qty-row">
+              <div class="qty-ctrl">
+                <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                <span class="qty-val" id="qty-val">1</span>
+                <button class="qty-btn" onclick="changeQty(1)">+</button>
+              </div>
+              <button
+                class="add-to-cart"
+                id="add-to-cart-btn"
+                onclick="addCurrentToCart()"
+              >
+                Add to Cart
+              </button>
+            </div>
+            <div class="seller-card">
+              <div class="seller-eyebrow">Sold By</div>
+              <div class="seller-info">
+                <div class="seller-avatar" id="seller-avatar"></div>
+                <div>
+                  <div class="seller-name" id="seller-name"></div>
+                  <div class="seller-meta" id="seller-meta"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="related-section">
+          <h2>More from this category</h2>
+          <div class="product-grid" id="related-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CART PAGE -->
+    <div id="page-cart" class="page">
+      <div class="cart-page">
+        <h1>Your Cart</h1>
+        <div id="cart-empty" class="cart-empty" style="display: none">
+          <div class="big-icon">🛒</div>
+          <h2>Your cart is empty</h2>
+          <p>Looks like you haven't added anything yet.</p>
+          <button class="btn-primary" onclick="showPage('shop')">
+            Start Shopping
+          </button>
+        </div>
+        <div id="cart-content">
+          <div class="cart-items" id="cart-items"></div>
+          <div class="cart-summary">
+            <div class="cart-row">
+              <span>Subtotal</span><span id="cart-subtotal">€0</span>
+            </div>
+            <div class="cart-row">
+              <span>Shipping</span><span>Calculated at checkout</span>
+            </div>
+            <div class="cart-total-row">
+              <span class="cart-total-label">Total</span>
+              <span class="cart-total-val" id="cart-total">€0</span>
+            </div>
+            <button class="checkout-btn">Proceed to Checkout →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT PAGE -->
+    <div id="page-about" class="page">
+      <div class="about-hero">
+        <div class="about-hero-inner">
+          <div class="section-eyebrow" style="margin-bottom: 16px">
+            Our Mission
+          </div>
+          <h1>We believe in the value of things made by hand</h1>
+          <p style="margin-top: 16px">
+            BazarMall was founded in 2022 with a simple idea: make it easy for
+            skilled craftspeople to share what they make with the people who'll
+            love it most.
+          </p>
+        </div>
+      </div>
+      <div class="about-body">
+        <div class="about-grid">
+          <div>
+            <div class="section-eyebrow" style="margin-bottom: 12px">
+              The Story
+            </div>
+            <h2>From a small bazaar to a digital marketplace</h2>
+            <p>
+              It started at a local weekend market in 2021. Our founders kept
+              noticing the same problem: talented artisans with extraordinary
+              products, but no real way to reach customers beyond a few busy
+              Saturdays a year.
+            </p>
+            <p>
+              We built BazarMall to give those makers a permanent, beautiful
+              home online — without the complexity of running their own shop.
+            </p>
+          </div>
+          <div class="about-values">
+            <div class="value-card">
+              <div class="value-icon">🫙</div>
+              <div class="value-title">Curated</div>
+              <div class="value-desc">Only quality handmade items</div>
+            </div>
+            <div class="value-card">
+              <div class="value-icon">🤝</div>
+              <div class="value-title">Fair</div>
+              <div class="value-desc">Low fees, more for makers</div>
+            </div>
+            <div class="value-card">
+              <div class="value-icon">🌿</div>
+              <div class="value-title">Local</div>
+              <div class="value-desc">Support your community</div>
+            </div>
+            <div class="value-card">
+              <div class="value-icon">💬</div>
+              <div class="value-title">Human</div>
+              <div class="value-desc">Real people behind every shop</div>
+            </div>
+          </div>
+        </div>
+        <div class="about-stats">
+          <div class="about-stat">
+            <div class="about-stat-num">120+</div>
+            <div class="about-stat-title">Independent Sellers</div>
+            <div class="about-stat-sub">
+              craftspeople earning on their own terms
+            </div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">10k+</div>
+            <div class="about-stat-title">Happy Customers</div>
+            <div class="about-stat-sub">across Europe and beyond</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">€2M+</div>
+            <div class="about-stat-title">Paid to Makers</div>
+            <div class="about-stat-sub">in our first two years</div>
+          </div>
+        </div>
+        <div class="about-cta">
+          <h2>Join us</h2>
+          <p>
+            Whether you're a buyer who loves finding unique pieces, or a maker
+            ready to share your work — BazarMall is for you.
+          </p>
+          <div class="about-cta-btns">
+            <button class="btn-primary">Start Selling</button>
+            <button class="btn-outline-light">Contact Us</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="nav-logo" onclick="showPage('home')">
+              <div class="nav-logo-icon">B</div>
+              <span>BazarMall</span>
+            </div>
+            <p>
+              A curated marketplace for handmade, artisan, and locally-sourced
+              products. Every purchase supports an independent maker.
+            </p>
+          </div>
+          <div>
+            <div class="footer-col-title">Shop</div>
+            <div class="footer-link" onclick="showPage('shop')">
+              All Products
+            </div>
+            <div class="footer-link" onclick="filterByCategory('Textiles')">
+              Textiles
+            </div>
+            <div class="footer-link" onclick="filterByCategory('Ceramics')">
+              Ceramics
+            </div>
+            <div class="footer-link" onclick="filterByCategory('Food & Drink')">
+              Food & Drink
+            </div>
+          </div>
+          <div>
+            <div class="footer-col-title">Company</div>
+            <div class="footer-link" onclick="showPage('about')">About Us</div>
+            <div class="footer-link">For Sellers</div>
+            <div class="footer-link">Blog</div>
+            <div class="footer-link">Press</div>
+          </div>
+          <div>
+            <div class="footer-col-title">Support</div>
+            <div class="footer-link">Help Centre</div>
+            <div class="footer-link">Shipping</div>
+            <div class="footer-link">Returns</div>
+            <div class="footer-link">Contact</div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div class="footer-copy">© 2026 BazarMall. All rights reserved.</div>
+          <div class="footer-copy">
+            Made with <a href="https://github.com/MahdMsv">MahdiMsv</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
